@@ -1,9 +1,11 @@
-package com.charter.reward;
+package com.charter.reward.controllers;
 
+import com.charter.reward.models.Transaction;
+import com.charter.reward.services.RewardService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -11,6 +13,8 @@ import java.util.Map;
 
 @RestController
 public class RewardController {
+    @Autowired
+    private RewardService rewardService;
     @GetMapping("/")
     public String index() {
         return "Charter Homework Assignment";
@@ -33,25 +37,13 @@ public class RewardController {
         return monthlyRewardPointsMap;
     }
 
-    Integer getPoints(Double transactionAmount) {
-        if (transactionAmount > 100) {
-            Integer points = 50; // 1 point for above 50
-            points += (transactionAmount.intValue() - 100) * 2; // 2 points for above 100
-            return points;
-        } else if (transactionAmount > 50) {
-            return (transactionAmount.intValue() - 50); // 1 point for above 50
-        } else {
-            return 0;
-        }
-    }
-
     Function<Transaction, Transaction> parseMonthName = new Function<Transaction, Transaction>() {
         @Override
         public Transaction apply(Transaction t) {
             return new Transaction(
                     t.getTransactionDate(),
                     t.getTransactionAmount(),
-                    t.getTransactionDate().getMonth().name(), getPoints(t.getTransactionAmount()));
+                    t.getTransactionDate().getMonth().name(), rewardService.getPoints(t.getTransactionAmount()));
         }
     };
 

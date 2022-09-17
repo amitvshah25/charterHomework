@@ -1,4 +1,4 @@
-package com.charter.reward;
+package com.charter.reward.models;
 
 import lombok.*;
 

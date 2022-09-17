@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.Map;
@@ -18,7 +20,7 @@ public class RewardController {
     }
 
     @PostMapping(value = "/reward", consumes = {"application/json"})
-    public Map<String, Transaction> calculateReward(@RequestBody List<Transaction> transactionList) {
+    public Map<String, RewardPoints> calculateReward(@RequestBody List<Transaction> transactionList) {
         Map<String, List<Transaction>> groupedTransactions = transactionList
                 .stream()
                 .map(parseMonthName)
@@ -27,14 +29,7 @@ public class RewardController {
                 .stream()
                 .map(e -> Map.entry(e.getKey(), e.getValue()
                         .stream()
-                        .reduce(new Transaction(),
-                                (Transaction accumulator, Transaction element) ->
-                                        new Transaction(null,
-                                                accumulator.getTransactionAmount() + element.getTransactionAmount(),
-                                                accumulator.getTransactionMonth(),
-                                                accumulator.getPoints() + element.getPoints()
-                                        )
-                                )))
+                        .reduce(new RewardPoints(), createReward, accumulateRewards)))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue ));
     }
 
@@ -57,6 +52,20 @@ public class RewardController {
                     t.getTransactionDate(),
                     t.getTransactionAmount(),
                     t.getTransactionDate().getMonth().name(), getPoints(t.getTransactionAmount()));
+        }
+    };
+
+    BiFunction<RewardPoints, Transaction, RewardPoints> createReward = new BiFunction<RewardPoints, Transaction, RewardPoints>() {
+        @Override
+        public RewardPoints apply(RewardPoints r, Transaction t) {
+            return new RewardPoints(t.getPoints(), t.getTransactionAmount(), t.getTransactionMonth());
+        }
+    };
+
+    BinaryOperator<RewardPoints> accumulateRewards = new BinaryOperator<RewardPoints>() {
+        @Override
+        public RewardPoints apply(RewardPoints r1, RewardPoints r2) {
+            return new RewardPoints(r1.getTotalPoints() + r2.getTotalPoints(), r1.getTotalTransactionAmount() + r2.getTotalTransactionAmount(), r1.getMonthName());
         }
     };
 }

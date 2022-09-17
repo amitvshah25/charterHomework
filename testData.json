@@ -1,0 +1,14 @@
+[
+  {"transactionDate": "2000-10-11", "transactionAmount": 357},
+  {"transactionDate": "2000-10-12", "transactionAmount": 23},
+  {"transactionDate": "2000-10-20", "transactionAmount": 34},
+  {"transactionDate": "2000-10-25", "transactionAmount": 56},
+  {"transactionDate": "2000-10-29", "transactionAmount": 103},
+  {"transactionDate": "2000-11-12", "transactionAmount": 120},
+  {"transactionDate": "2000-12-12", "transactionAmount": 37},
+  {"transactionDate": "2000-12-01", "transactionAmount": 37},
+  {"transactionDate": "2000-12-05", "transactionAmount": 33},
+  {"transactionDate": "2000-12-07", "transactionAmount": 57},
+  {"transactionDate": "2000-12-23", "transactionAmount": 173},
+  {"transactionDate": "2000-12-28", "transactionAmount": 58}
+]

@@ -33,7 +33,7 @@ public class RewardController {
         return monthlyRewardPointsMap;
     }
 
-    private Integer getPoints(Double transactionAmount) {
+    Integer getPoints(Double transactionAmount) {
         if (transactionAmount > 100) {
             Integer points = 50; // 1 point for above 50
             points += (transactionAmount.intValue() - 100) * 2; // 2 points for above 100

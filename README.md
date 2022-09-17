@@ -1,5 +1,8 @@
 # Charter Homework
 
+### Sample data
+Sample data is provided in `testData.json` at the project root.
+
 ### Prerequisites
 - gradle 7.5.1 (to build the project)
 - OpenJDK 15.0.2 (JDK version)
